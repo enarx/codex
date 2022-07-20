@@ -1,0 +1,6 @@
+[build]
+target = "wasm32-wasi"
+
+[target.wasm32-wasi]
+runner = ["wasmtime", "run", "--tcplisten", "127.0.0.1:8080"]
+rustflags = [ "--cfg", "tokio_unstable"]
