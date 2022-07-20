@@ -1,0 +1,17 @@
+[package]
+name = "wasi_tokio_http"
+version = "0.0.1"
+publish = false
+edition = "2021"
+
+[dependencies]
+tokio = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b", features = ["net", "rt", "macros"] }
+tokio-util = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b", features = ["codec"] }
+tokio-stream = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b"  }
+
+bytes = "1.0.0"
+futures = { version = "0.3.0", features = ["thread-pool"]}
+
+http = "0.2"
+httparse = "1.0"
+httpdate = "1.0"
