@@ -8,8 +8,9 @@ jobs:
     strategy:
       matrix:
         output: 
-        - fibonacci-rust
+        - cryptle-rust
         - echo-tcp-rust-mio
+        - fibonacci-rust
         - http-rust-tokio
 
     runs-on: ubuntu-20.04
