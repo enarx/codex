@@ -82,6 +82,33 @@
         conf = defaultConf final;
       };
 
+      fibonacci-zig-wasm = final.stdenv.mkDerivation {
+        pname = "fibonacci";
+        version = "0.1.0";
+
+        src = "${self}/Zig/fibonacci";
+
+        nativeBuildInputs = with final; [zig];
+
+        configurePhase = ''
+          export HOME=$TMPDIR
+        '';
+
+        installPhase = ''
+          zig build -Dtarget=wasm32-wasi -Drelease-safe -Dcpu=baseline --prefix $out install
+        '';
+      };
+
+      fibonacci-zig = buildEnarxPackage {
+        inherit (final) pkgs;
+        inherit (final.fibonacci-zig-wasm) version;
+        name = final.fibonacci-zig-wasm.pname;
+
+        wasm = "${final.fibonacci-zig-wasm}/bin/fibonacci.wasm";
+        # TODO: Read this from repo
+        conf = defaultConf final;
+      };
+
       echo-tcp-rust-mio-wasm = naersk-lib.buildPackage {
         src = "${self}/Rust/mio-echo-tcp";
         CARGO_BUILD_TARGET = "wasm32-wasi";
@@ -171,6 +198,9 @@
 
         packages.fibonacci-rust = pkgs.fibonacci-rust;
         packages.fibonacci-rust-wasm = pkgs.fibonacci-rust-wasm;
+
+        packages.fibonacci-zig = pkgs.fibonacci-zig;
+        packages.fibonacci-zig-wasm = pkgs.fibonacci-zig-wasm;
 
         packages.http-rust-tokio = pkgs.http-rust-tokio;
         packages.http-rust-tokio-wasm = pkgs.http-rust-tokio-wasm;
