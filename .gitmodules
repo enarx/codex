@@ -4,3 +4,6 @@
 [submodule "C#/GreenhouseMonitor"]
 	path = "C#/GreenhouseMonitor"
 	url = https://github.com/enarx/GreenhouseMonitor.git
+[submodule "Multiple/Wordle"]
+	path = Multiple/Wordle
+	url = https://github.com/rjzak/web_wordpuzzle.git
