@@ -1,3 +1,6 @@
 [submodule "Rust/cryptle"]
 	path = Rust/cryptle
 	url = https://github.com/enarx/cryptle.git
+[submodule "C#/GreenhouseMonitor"]
+	path = "C#/GreenhouseMonitor"
+	url = https://github.com/enarx/GreenhouseMonitor.git
