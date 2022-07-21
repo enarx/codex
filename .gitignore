@@ -1,4 +1,6 @@
 Rust/*/target/
+Zig/*/zig-cache/
+Zig/*/zig-out/
 .idea/
 .vscode/
 result
