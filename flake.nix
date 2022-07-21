@@ -68,6 +68,39 @@
         rustc = rust;
       };
     in {
+      fibonacci-go-wasm = final.stdenv.mkDerivation rec {
+        pname = "fibonacci";
+        version = "0.1.0";
+
+        src = "${self}/Go/fibonacci";
+
+        nativeBuildInputs = with final; [tinygo];
+
+        configurePhase = ''
+          export HOME=$TMPDIR
+          export GOCACHE=$TMPDIR/go-cache
+        '';
+
+        buildPhase = ''
+          tinygo build -target wasi main.go
+        '';
+
+        installPhase = ''
+          mkdir -p $out/bin
+          cp main.wasm $out/bin/${pname}.wasm
+        '';
+      };
+
+      fibonacci-go = buildEnarxPackage {
+        inherit (final) pkgs;
+        inherit (final.fibonacci-go-wasm) version;
+        name = final.fibonacci-go-wasm.pname;
+
+        wasm = "${final.fibonacci-go-wasm}/bin/fibonacci.wasm";
+        # TODO: Read this from repo
+        conf = defaultConf final;
+      };
+
       fibonacci-rust-wasm = naersk-lib.buildPackage {
         src = "${self}/Rust/fibonacci";
         CARGO_BUILD_TARGET = "wasm32-wasi";
@@ -195,6 +228,9 @@
 
         packages.echo-tcp-rust-mio = pkgs.echo-tcp-rust-mio;
         packages.echo-tcp-rust-mio-wasm = pkgs.echo-tcp-rust-mio-wasm;
+
+        packages.fibonacci-go = pkgs.fibonacci-go;
+        packages.fibonacci-go-wasm = pkgs.fibonacci-go-wasm;
 
         packages.fibonacci-rust = pkgs.fibonacci-rust;
         packages.fibonacci-rust-wasm = pkgs.fibonacci-rust-wasm;
