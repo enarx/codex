@@ -45,7 +45,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "tcp_server"
+name = "mio-echo-tcp"
 version = "0.1.0"
 dependencies = [
  "env_logger",
