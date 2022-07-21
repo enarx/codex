@@ -1,6 +1,7 @@
 {
   description = "Enarx Cod(e) Ex(amples)";
 
+  inputs.cryptle.url = github:enarx/cryptle;
   inputs.enarx.url = github:enarx/enarx/v0.6.1;
   inputs.fenix.url = github:nix-community/fenix;
   inputs.flake-utils.url = github:numtide/flake-utils;
@@ -10,6 +11,7 @@
 
   outputs = {
     self,
+    cryptle,
     enarx,
     fenix,
     flake-utils,
@@ -146,6 +148,7 @@
           overlays = [
             codex
             credentialHelpers
+            cryptle.overlays.default
           ];
         };
       in {
@@ -153,6 +156,9 @@
 
         packages.enarx-credential-helper-gopass = pkgs.enarx-credential-helper-gopass;
         packages.enarx-credential-helper-pass = pkgs.enarx-credential-helper-pass;
+
+        packages.cryptle-rust = pkgs.cryptle-enarx;
+        packages.cryptle-rust-wasm = pkgs.cryptle-wasm;
 
         packages.echo-tcp-rust-mio = pkgs.echo-tcp-rust-mio;
         packages.echo-tcp-rust-mio-wasm = pkgs.echo-tcp-rust-mio-wasm;
