@@ -11,6 +11,7 @@ jobs:
         - cryptle-rust
         - echo-tcp-rust-mio
         - fibonacci-rust
+        - fibonacci-zig
         - http-rust-tokio
 
     runs-on: ubuntu-20.04
