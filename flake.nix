@@ -137,7 +137,13 @@
     };
   in
     with flake-utils.lib.system;
-      flake-utils.lib.eachSystem [
+      {
+        overlays.codex = codex;
+        overlays.credentialHelpers = credentialHelpers;
+
+        overlays.default = codex;
+      }
+      // flake-utils.lib.eachSystem [
         aarch64-darwin
         aarch64-linux
         x86_64-darwin
