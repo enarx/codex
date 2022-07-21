@@ -1,0 +1,3 @@
+[submodule "Rust/cryptle"]
+	path = Rust/cryptle
+	url = https://github.com/enarx/cryptle.git
