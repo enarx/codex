@@ -68,6 +68,48 @@
         rustc = rust;
       };
     in {
+      fibonacci-c-wasm =
+        final.pkgsCross.wasi32.runCommandCC "fibonacci" {
+          pname = "fibonacci";
+          version = "0.1.0";
+        }
+        ''
+          mkdir -p "$out/bin"
+          $CC -Wall -pedantic ${self}/C/fibonacci/fibonacci.c \
+            -o "$out/bin/fibonacci.wasm"
+        '';
+
+      fibonacci-c = buildEnarxPackage {
+        inherit (final) pkgs;
+        inherit (final.fibonacci-c-wasm) version;
+        name = final.fibonacci-c-wasm.pname;
+
+        wasm = "${final.fibonacci-c-wasm}/bin/fibonacci.wasm";
+        # TODO: Read this from repo
+        conf = defaultConf final;
+      };
+
+      fibonacci-cpp-wasm =
+        final.pkgsCross.wasi32.runCommandCC "fibonacci" {
+          pname = "fibonacci";
+          version = "0.1.0";
+        }
+        ''
+          mkdir -p "$out/bin"
+          $CXX -Wall -pedantic ${self}/C++/fibonacci/fibonacci.cpp \
+            -o "$out/bin/fibonacci.wasm"
+        '';
+
+      fibonacci-cpp = buildEnarxPackage {
+        inherit (final) pkgs;
+        inherit (final.fibonacci-cpp-wasm) version;
+        name = final.fibonacci-cpp-wasm.pname;
+
+        wasm = "${final.fibonacci-cpp-wasm}/bin/fibonacci.wasm";
+        # TODO: Read this from repo
+        conf = defaultConf final;
+      };
+
       fibonacci-go-wasm = final.stdenv.mkDerivation rec {
         pname = "fibonacci";
         version = "0.1.0";
@@ -217,29 +259,45 @@
             cryptle.overlays.default
           ];
         };
+
+        packages = with pkgs;
+          {
+            inherit
+              echo-tcp-rust-mio
+              echo-tcp-rust-mio-wasm
+              enarx-credential-helper-gopass
+              enarx-credential-helper-pass
+              fibonacci-c
+              fibonacci-c-wasm
+              fibonacci-cpp
+              fibonacci-cpp-wasm
+              fibonacci-rust
+              fibonacci-rust-wasm
+              http-rust-tokio
+              http-rust-tokio-wasm
+              ;
+
+            cryptle-rust = cryptle-enarx;
+            cryptle-rust-wasm = cryptle-wasm;
+          }
+          // lib.optionalAttrs (!tinygo.meta.broken) {
+            # NOTE: TinyGo is broken on some platforms, only add Go packages on platforms where it works
+            inherit
+              fibonacci-go
+              fibonacci-go-wasm
+              ;
+          }
+          // lib.optionalAttrs (!zig.meta.broken) {
+            # NOTE: Zig is broken on some platforms, only add Zig packages on platforms where it works
+            inherit
+              fibonacci-zig
+              fibonacci-zig-wasm
+              ;
+          };
       in {
+        inherit packages;
+
         formatter = pkgs.alejandra;
-
-        packages.enarx-credential-helper-gopass = pkgs.enarx-credential-helper-gopass;
-        packages.enarx-credential-helper-pass = pkgs.enarx-credential-helper-pass;
-
-        packages.cryptle-rust = pkgs.cryptle-enarx;
-        packages.cryptle-rust-wasm = pkgs.cryptle-wasm;
-
-        packages.echo-tcp-rust-mio = pkgs.echo-tcp-rust-mio;
-        packages.echo-tcp-rust-mio-wasm = pkgs.echo-tcp-rust-mio-wasm;
-
-        packages.fibonacci-go = pkgs.fibonacci-go;
-        packages.fibonacci-go-wasm = pkgs.fibonacci-go-wasm;
-
-        packages.fibonacci-rust = pkgs.fibonacci-rust;
-        packages.fibonacci-rust-wasm = pkgs.fibonacci-rust-wasm;
-
-        packages.fibonacci-zig = pkgs.fibonacci-zig;
-        packages.fibonacci-zig-wasm = pkgs.fibonacci-zig-wasm;
-
-        packages.http-rust-tokio = pkgs.http-rust-tokio;
-        packages.http-rust-tokio-wasm = pkgs.http-rust-tokio-wasm;
 
         devShells.default = pkgs.mkShell {
           buildInputs = [
