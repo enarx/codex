@@ -159,7 +159,7 @@
 
       fibonacci-zig-wasm = final.stdenv.mkDerivation {
         pname = "fibonacci";
-        version = "0.1.0";
+        version = "0.2.0";
 
         src = "${self}/Zig/fibonacci";
 
@@ -180,8 +180,7 @@
         name = final.fibonacci-zig-wasm.pname;
 
         wasm = "${final.fibonacci-zig-wasm}/bin/fibonacci.wasm";
-        # TODO: Read this from repo
-        conf = defaultConf final;
+        conf = "${self}/Zig/fibonacci/Enarx.toml";
       };
 
       echo-tcp-rust-mio-wasm = naersk-lib.buildPackage {
