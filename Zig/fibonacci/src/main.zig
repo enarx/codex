@@ -1,14 +1,19 @@
 const std = @import("std");
 
-fn fibonacci(index: u32) u32 {
-    if (index < 2) return index;
-    return fibonacci(index - 1) + fibonacci(index - 2);
+fn fibonacci(i: u64) u64 {
+    if (i <= 1) return i;
+    return fibonacci(i - 1) + fibonacci(i - 2);
 }
 
 pub fn main() !void {
-    const stdout = std.io.getStdOut().writer();
-    var x: u32 = 7;
+    const alloc: std.mem.Allocator = std.heap.page_allocator;
 
-    try stdout.print("fibonacci of {d} ", .{x});
-    try stdout.print("is: {d} \n ", .{fibonacci(x)}  );
+    var args = try std.process.argsAlloc(alloc);
+    defer alloc.free(args);
+
+    const stdout = std.io.getStdOut().writer();
+    for (args[1..]) |arg| {
+        const i = try std.fmt.parseUnsigned(u64, arg, 10);
+        try stdout.print("Fibonacci sequence number at index {d} is {d}\n", .{i, fibonacci(i)});
+    }
 }
