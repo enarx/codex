@@ -14,7 +14,13 @@ async fn main() -> std::io::Result<()> {
 
     loop {
         // Accept new sockets in a loop.
-        let (socket, _) = listener.accept().await?;
+        let socket = match listener.accept().await {
+            Ok(s) => s.0,
+            Err(e) => {
+                eprintln!("> ERROR: {}", e);
+                continue;
+            }
+        };
 
         // Spawn a background task for each new connection.
         tokio::spawn(async move {
