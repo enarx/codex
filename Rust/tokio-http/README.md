@@ -8,6 +8,8 @@ example in the tokio repository.
 
 Be sure to update your rust stable toolchain to at least 1.60.0.
 
+Please ensure that you're using the standard toolchain (rustup default).
+
 ## Running
 
 ### wasmtime
