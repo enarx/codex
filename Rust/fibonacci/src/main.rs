@@ -1,24 +1,26 @@
-use std::io;
+use std::env::args;
+use std::io::stdin;
 
-fn fib (n: u32) -> u32 {
-    if n <= 0 {
-        return 0;
-    } else if n == 1 {
-        return 1;
-    }   fib(n - 1) + fib(n - 2)
- }
+fn fib(n: u32) -> u32 {
+    match n {
+        0 => 0,
+        1 => 1,
+        n => fib(n - 1) + fib(n - 2),
+    }
+}
 
- fn main() {
-    let mut nth = String::new();
+fn main() {
+    let mut args: Vec<_> = args().skip(1).collect();
 
-    println!("Enter input: ");
+    if args.is_empty() {
+        println!("Enter a non-negative number:");
+        let mut idx = String::new();
+        stdin().read_line(&mut idx).expect("Failed to read line");
+        args.push(idx);
+    }
 
-    io::stdin()
-        .read_line(&mut nth)
-        .expect("Failed to read line");
-
-    let nth: u32 = nth.trim().parse().expect("Please type a number!");
-
-    println!("Fibonacci: {}", fib(nth));
-
+    for arg in args {
+        let idx = arg.trim().parse().expect("Failed to parse number");
+        println!("Fibonacci sequence number at index {} is {}", idx, fib(idx));
+    }
 }
