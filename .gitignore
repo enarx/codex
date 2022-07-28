@@ -4,3 +4,5 @@ Zig/*/zig-out/
 .idea/
 .vscode/
 result
+*.wasm
+a.out
