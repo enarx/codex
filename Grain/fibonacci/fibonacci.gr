@@ -1,9 +1,27 @@
-let rec fibonacci = (n) => {
-  if (n == 0 || n == 1) {
-n
+import {toList} from "array"
+import {drop, forEach, length, map} from "list"
+import {parseInt} from "number"
+import {trim} from "string"
+import {fdRead, stdin} from "sys/file"
+import {argv} from "sys/process"
+import {expect} from "result"
+
+let rec fibonacci = (i) => {
+  if (i <= 1) {
+    i
   } else {
-fibonacci(n - 1) + fibonacci(n - 2)
+    fibonacci(i - 1) + fibonacci(i - 2)
   }
 }
 
-print(fibonacci(7))
+let args = expect("failed to parse arguments", argv())
+let indexes = drop(1, toList(args))
+let indexes = if (length(indexes) == 0) {
+    print("No arguments specified, please specify Fibonacci sequence index: ")
+    let (s, _) = expect("failed to read stdin", fdRead(stdin, 19))
+    let i = expect("failed to parse stdin as integer number", parseInt(trim(s), 10))
+    [i]
+} else {
+    map((arg) => { expect("failed to parse argument " ++ toString(arg) ++ " as integer number", parseInt(arg, 10)) }, indexes)
+}
+forEach((i) => { print("Fibonacci sequence number at index " ++ toString(i) ++ " is " ++ toString(fibonacci(i)) ++ "\n") }, indexes)
