@@ -196,6 +196,19 @@
         conf = "${self}/Rust/mio-echo-tcp/Enarx.toml";
       };
 
+      echo-tcp-rust-tokio-wasm = naersk-lib.buildPackage {
+        src = "${self}/Rust/tokio-echo-tcp";
+        CARGO_BUILD_TARGET = "wasm32-wasi";
+      };
+
+      echo-tcp-rust-tokio = buildEnarxPackage {
+        inherit (final) pkgs;
+        inherit (cargoPackage "${self}/Rust/tokio-echo-tcp/Cargo.toml") name version;
+
+        wasm = "${final.echo-tcp-rust-tokio-wasm}/bin/tokio-echo-tcp.wasm";
+        conf = "${self}/Rust/tokio-echo-tcp/Enarx.toml";
+      };
+
       http-rust-tokio-wasm = naersk-lib.buildPackage {
         src = "${self}/Rust/tokio-http";
         CARGO_BUILD_TARGET = "wasm32-wasi";
@@ -264,6 +277,8 @@
             inherit
               echo-tcp-rust-mio
               echo-tcp-rust-mio-wasm
+              echo-tcp-rust-tokio
+              echo-tcp-rust-tokio-wasm
               enarx-credential-helper-gopass
               enarx-credential-helper-pass
               fibonacci-c

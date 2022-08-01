@@ -10,6 +10,7 @@ jobs:
         output: 
         - cryptle-rust
         - echo-tcp-rust-mio
+        - echo-tcp-rust-tokio
         - fibonacci-c
         - fibonacci-cpp
         - fibonacci-go
