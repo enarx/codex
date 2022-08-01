@@ -52,16 +52,16 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1658349943,
-        "narHash": "sha256-skTtV1St2kw5jQAQOEg7uU1QHofOade/VdRiCMoiuNc=",
+        "lastModified": 1659034228,
+        "narHash": "sha256-/ZAxw/VUqWt2srXuDMcNVxBM8ggr4VwagKRizZ2fUmY=",
         "owner": "enarx",
         "repo": "enarx",
-        "rev": "6aed5ae37cc087471099745e938b75e5981fe1ce",
+        "rev": "dcf7e103eb12916d1303452e38df391abfe4cd8c",
         "type": "github"
       },
       "original": {
         "owner": "enarx",
-        "ref": "v0.6.1",
+        "ref": "v0.6.2",
         "repo": "enarx",
         "type": "github"
       }
