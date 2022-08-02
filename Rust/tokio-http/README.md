@@ -6,7 +6,7 @@ example in the tokio repository.
 
 ## Prerequisites
 
-Be sure to update your rust stable toolchain to at least 1.60.0.
+Be sure to use a stable Rust toolchain that is no older than Rust 1.60.0. You can use `cargo --version` to view the version of your default Rust toolchain.
 
 ## Running
 
