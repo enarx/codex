@@ -110,7 +110,7 @@
 
       fibonacci-go-wasm = final.stdenv.mkDerivation rec {
         pname = "fibonacci";
-        version = "0.1.0";
+        version = "0.2.0";
 
         src = "${self}/Go/fibonacci";
 
@@ -137,8 +137,7 @@
         name = final.fibonacci-go-wasm.pname;
 
         wasm = "${final.fibonacci-go-wasm}/bin/fibonacci.wasm";
-        # TODO: Read this from repo
-        conf = defaultConf final;
+        conf = "${self}/Go/fibonacci/Enarx.toml";
       };
 
       fibonacci-rust-wasm = naersk-lib.buildPackage {
