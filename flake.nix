@@ -150,8 +150,7 @@
         inherit (cargoPackage "${self}/Rust/fibonacci/Cargo.toml") name version;
 
         wasm = "${final.fibonacci-rust-wasm}/bin/fibonacci.wasm";
-        # TODO: Read this from repo
-        conf = defaultConf final;
+        conf = "${self}/Rust/fibonacci/Enarx.toml";
       };
 
       fibonacci-zig-wasm = final.stdenv.mkDerivation {
