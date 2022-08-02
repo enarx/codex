@@ -20,24 +20,12 @@
   }: let
     cargoPackage = toml: (builtins.fromTOML (builtins.readFile toml)).package;
 
-    defaultConf = pkgs:
-      pkgs.writeText "Enarx.toml" ''
-        [[files]]
-        kind = "stdin"
-
-        [[files]]
-        kind = "stdout"
-
-        [[files]]
-        kind = "stderr"
-      '';
-
     buildEnarxPackage = {
       pkgs,
       name,
       version,
       wasm,
-      conf ? null,
+      conf,
     }:
       pkgs.stdenv.mkDerivation {
         inherit version;
@@ -45,15 +33,31 @@
         pname = name;
 
         dontUnpack = true;
-        installPhase =
-          ''
-            mkdir -p $out
-            cp ${wasm} $out/main.wasm
-          ''
-          + pkgs.lib.optionalString (conf != null) ''
-            cp ${conf} $out/Enarx.toml
-          '';
+        installPhase = ''
+          mkdir -p $out
+          cp ${conf} $out/Enarx.toml
+          cp ${wasm} $out/main.wasm
+        '';
       };
+
+    buildFibonacciPackage = {
+      conf,
+      pkgs,
+      wasm,
+      ...
+    } @ args:
+      (buildEnarxPackage args).overrideAttrs (attrs: {
+        doCheck = true;
+
+        checkInputs = [
+          enarx.packages.${pkgs.system}.enarx-static
+        ];
+
+        checkPhase = ''
+          ${self}/test.sh ${self}/tests/fibonacci/golden/default --wasmcfgfile ${conf} ${wasm}
+          cat ${self}/tests/fibonacci/stdin | ${self}/test.sh ${self}/tests/fibonacci/golden/stdin ${wasm}
+        '';
+      });
 
     codex = final: prev: let
       rust = with fenix.packages.${final.system};
@@ -79,7 +83,7 @@
             -o "$out/bin/fibonacci.wasm"
         '';
 
-      fibonacci-c = buildEnarxPackage {
+      fibonacci-c = buildFibonacciPackage {
         inherit (final) pkgs;
         inherit (final.fibonacci-c-wasm) version;
         name = final.fibonacci-c-wasm.pname;
@@ -99,7 +103,7 @@
             -o "$out/bin/fibonacci.wasm"
         '';
 
-      fibonacci-cpp = buildEnarxPackage {
+      fibonacci-cpp = buildFibonacciPackage {
         inherit (final) pkgs;
         inherit (final.fibonacci-cpp-wasm) version;
         name = final.fibonacci-cpp-wasm.pname;
@@ -131,7 +135,7 @@
         '';
       };
 
-      fibonacci-go = buildEnarxPackage {
+      fibonacci-go = buildFibonacciPackage {
         inherit (final) pkgs;
         inherit (final.fibonacci-go-wasm) version;
         name = final.fibonacci-go-wasm.pname;
@@ -145,7 +149,7 @@
         CARGO_BUILD_TARGET = "wasm32-wasi";
       };
 
-      fibonacci-rust = buildEnarxPackage {
+      fibonacci-rust = buildFibonacciPackage {
         inherit (final) pkgs;
         inherit (cargoPackage "${self}/Rust/fibonacci/Cargo.toml") name version;
 
@@ -170,7 +174,7 @@
         '';
       };
 
-      fibonacci-zig = buildEnarxPackage {
+      fibonacci-zig = buildFibonacciPackage {
         inherit (final) pkgs;
         inherit (final.fibonacci-zig-wasm) version;
         name = final.fibonacci-zig-wasm.pname;
