@@ -91,7 +91,7 @@
       fibonacci-cpp-wasm =
         final.pkgsCross.wasi32.runCommandCC "fibonacci" {
           pname = "fibonacci";
-          version = "0.1.0";
+          version = "0.2.0";
         }
         ''
           mkdir -p "$out/bin"
@@ -105,8 +105,7 @@
         name = final.fibonacci-cpp-wasm.pname;
 
         wasm = "${final.fibonacci-cpp-wasm}/bin/fibonacci.wasm";
-        # TODO: Read this from repo
-        conf = defaultConf final;
+        conf = "${self}/C++/fibonacci/Enarx.toml";
       };
 
       fibonacci-go-wasm = final.stdenv.mkDerivation rec {
