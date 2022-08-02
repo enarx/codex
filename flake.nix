@@ -54,8 +54,8 @@
         ];
 
         checkPhase = ''
-          ${self}/test.sh ${self}/tests/fibonacci/golden/default --wasmcfgfile ${conf} ${wasm}
-          cat ${self}/tests/fibonacci/stdin | ${self}/test.sh ${self}/tests/fibonacci/golden/stdin ${wasm}
+          ${self}/tests/run.sh ${self}/tests/fibonacci/golden/default --wasmcfgfile ${conf} ${wasm}
+          cat ${self}/tests/fibonacci/stdin | ${self}/tests/run.sh ${self}/tests/fibonacci/golden/stdin ${wasm}
         '';
       });
 
