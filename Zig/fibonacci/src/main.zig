@@ -29,7 +29,7 @@ pub fn main() !void {
         const stdin = std.io.getStdIn();
         defer stdin.close();
 
-        try out.print("No arguments specified, please specify Fibonacci sequence index: \n", .{});
+        try out.print("Enter a non-negative number:\n", .{});
         var buf: [19]u8 = undefined;
         if (try stdin.reader().readUntilDelimiterOrEof(&buf, '\n')) |arg| {
             try print_fibonacci(out, arg);
