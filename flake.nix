@@ -308,15 +308,41 @@
               fibonacci-zig-wasm
               ;
           };
+
+        devShells = with pkgs;
+          {
+            default = mkShell {
+              buildInputs = [
+                enarx.packages.${system}.enarx-static
+              ];
+            };
+          }
+          // lib.optionalAttrs (!tinygo.meta.broken) {
+            # NOTE: TinyGo is broken on some platforms, only add Go shell on platforms where it works
+            go = devShells.default.overrideAttrs (attrs: {
+              buildInputs =
+                attrs.buildInputs
+                ++ [
+                  tinygo
+                ];
+            });
+          }
+          // lib.optionalAttrs (!zig.meta.broken) {
+            # NOTE: Zig is broken on some platforms, only add Zig shell on platforms where it works
+            zig = devShells.default.overrideAttrs (attrs: {
+              buildInputs =
+                attrs.buildInputs
+                ++ [
+                  zig
+                ];
+            });
+          };
       in {
-        inherit packages;
+        inherit
+          devShells
+          packages
+          ;
 
         formatter = pkgs.alejandra;
-
-        devShells.default = pkgs.mkShell {
-          buildInputs = [
-            enarx.packages.${system}.enarx-static
-          ];
-        };
       });
 }
