@@ -1,4 +1,7 @@
 Rust/*/target/
+Nim/*/*
+!Nim/*/*.*
+!Nim/*/*/
 Zig/*/zig-cache/
 Zig/*/zig-out/
 .idea/
