@@ -12,16 +12,16 @@ var n:UInt
 if (arguments.count > 1) {
 	for i in 1...arguments.count-1 {
 		if let n = UInt(arguments[i]) {
-			print("Fibonacci sequence number at index \(n) is \(fib(n: n))")
+			print("Fibonacci sequence number at index \(n) is \(fib(n: n))\n")
 		} else {
 			print("Failed to parse argument into a number: \(arguments[i])\n")
 		}
 	}
 } else {
-	print("Enter a non-negative number:")
+	print("Enter a non-negative number:\n")
 	if let line = readLine() {
 		if let n = UInt(line) {
-			print("Fibonacci sequence number at index \(n) is \(fib(n: n))")
+			print("Fibonacci sequence number at index \(n) is \(fib(n: n))\n")
 		} else {
 			print("Could not convert \(line) to integer.\n")	
 		}
