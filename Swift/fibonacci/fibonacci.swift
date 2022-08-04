@@ -6,6 +6,8 @@ func fib(n: UInt) -> UInt {
 	return fib(n: n-1) + fib(n: n-2)
 }
 
+print("Swift - Fibonacci sequence example\n")
+
 let arguments = CommandLine.arguments
 
 var n:UInt

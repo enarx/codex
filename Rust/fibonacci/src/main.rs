@@ -10,6 +10,8 @@ fn fib(n: u32) -> u32 {
 }
 
 fn main() {
+    println!("Rust - Fibonacci sequence example");
+
     let mut args: Vec<_> = args().skip(1).collect();
 
     if args.is_empty() {

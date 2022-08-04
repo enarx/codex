@@ -21,6 +21,8 @@ func fib(n uint64) uint64 {
 }
 
 func main() {
+	fmt.Println("Go - Fibonacci sequence example")
+
 	flag.Parse()
 
 	args := flag.Args()

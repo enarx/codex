@@ -20,6 +20,9 @@ pub fn main() !void {
     defer stdout.close();
 
     const out = stdout.writer();
+
+    try out.print("Zig - Fibonacci sequence example\n", .{});
+
     const indexes = args[1..];
     if (indexes.len > 0) {
         for (indexes) |arg| {
