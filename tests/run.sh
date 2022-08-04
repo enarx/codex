@@ -9,4 +9,4 @@ golden="${1}"
 shift 1
 
 set -ex
-enarx run "${@}" | diff "${golden}" -
+enarx run "${@}" | { read line; while read line; do echo $line; done } | diff "${golden}" -

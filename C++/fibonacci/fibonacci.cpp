@@ -12,6 +12,7 @@ unsigned long fib(unsigned long i) {
 }
 
 int main(int argc, char *argv[]) {
+  cout << "C++ - Fibonacci sequence example" << endl;
   if (argc <= 1) {
     unsigned long n;
     cout << "Enter a non-negative number:" << endl;

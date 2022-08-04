@@ -3,6 +3,8 @@ def FibonacciSequence( n )
   ( FibonacciSequence( n - 1 ) + FibonacciSequence( n - 2 ) )
 end
 
+puts "Ruby - Fibonacci sequence example"
+
 if ARGV.length > 0
   ARGV.each { |arg|
 	n = arg.to_i

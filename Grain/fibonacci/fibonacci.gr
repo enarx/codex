@@ -6,6 +6,8 @@ import {fdRead, stdin} from "sys/file"
 import {argv} from "sys/process"
 import {expect} from "result"
 
+print("Grain - Fibonacci sequence example\n")
+
 let rec fibonacci = (i) => {
   if (i <= 1) {
     i

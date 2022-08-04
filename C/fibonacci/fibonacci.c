@@ -11,6 +11,7 @@ unsigned long fib(unsigned long i) {
 }
 
 int main(int argc, char *argv[]) {
+  printf("C - Fibonacci sequence example\n");
   if (argc <= 1) {
     unsigned long n;
     printf("Enter a non-negative number:\n");
