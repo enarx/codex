@@ -9,7 +9,7 @@ if ARGV.length > 0
     puts "Fibonacci sequence number at index #{n} is #{FibonacciSequence(n)}"
   }
 else
-  puts "Which Fibonacci index to find? "
+  puts "Enter a non-negative number:"
   n = ARGF.gets.to_i
   puts "Fibonacci sequence number at index #{n} is #{FibonacciSequence(n)}"
 end

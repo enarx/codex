@@ -17,7 +17,7 @@ let rec fibonacci = (i) => {
 let args = expect("failed to parse arguments", argv())
 let indexes = drop(1, toList(args))
 let indexes = if (length(indexes) == 0) {
-    print("No arguments specified, please specify Fibonacci sequence index: ")
+    print("Enter a non-negative number:\n")
     let (s, _) = expect("failed to read stdin", fdRead(stdin, 19))
     let i = expect("failed to parse stdin as integer number", parseInt(trim(s), 10))
     [i]
