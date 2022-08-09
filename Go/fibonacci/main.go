@@ -32,7 +32,7 @@ func main() {
 		sc.Scan()
 		b, err := sc.Bytes(), sc.Err()
 		if err != nil {
-			log.Fatal("Failed to read stdin: %s", err)
+			log.Fatalf("Failed to read stdin: %s", err)
 		}
 		args = []string{string(b)}
 	}
