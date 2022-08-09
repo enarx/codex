@@ -6,7 +6,7 @@ args = [
 
 # Pre-opened file descriptors
 [[files]]
-kind = "null"
+kind = "stdin"
 
 [[files]]
 kind = "stdout"
