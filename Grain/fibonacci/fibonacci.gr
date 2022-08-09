@@ -6,7 +6,7 @@ import {fdRead, stdin} from "sys/file"
 import {argv} from "sys/process"
 import {expect} from "result"
 
-print("Grain - Fibonacci sequence example\n")
+print("Grain - Fibonacci sequence example")
 
 let rec fibonacci = (i) => {
   if (i <= 1) {
@@ -19,11 +19,11 @@ let rec fibonacci = (i) => {
 let args = expect("failed to parse arguments", argv())
 let indexes = drop(1, toList(args))
 let indexes = if (length(indexes) == 0) {
-    print("Enter a non-negative number:\n")
+    print("Enter a non-negative number:")
     let (s, _) = expect("failed to read stdin", fdRead(stdin, 19))
     let i = expect("failed to parse stdin as integer number", parseInt(trim(s), 10))
     [i]
 } else {
     map((arg) => { expect("failed to parse argument " ++ toString(arg) ++ " as integer number", parseInt(arg, 10)) }, indexes)
 }
-forEach((i) => { print("Fibonacci sequence number at index " ++ toString(i) ++ " is " ++ toString(fibonacci(i)) ++ "\n") }, indexes)
+forEach((i) => { print("Fibonacci sequence number at index " ++ toString(i) ++ " is " ++ toString(fibonacci(i))) }, indexes)
