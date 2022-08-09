@@ -13,10 +13,10 @@ Be sure to use a stable Rust toolchain that is no older than Rust 1.60.0. You ca
 ### wasmtime
 
 ```console
-❯ CARGO_TARGET_WASM32_WASI_RUNNER="wasmtime run --tcplisten 127.0.0.1:8080" cargo run --target wasm32-wasi  
+❯ CARGO_TARGET_WASM32_WASI_RUNNER="wasmtime run --tcplisten 127.0.0.1:10020" cargo run --target wasm32-wasi  
 ```
 
-Server is running on [`http://127.0.0.1:8080`](http://127.0.0.1:8080).
+Server is running on [`http://127.0.0.1:10020`](http://127.0.0.1:10020).
 
 ### enarx
 
@@ -26,4 +26,4 @@ after installing [enarx](https://github.com/enarx/enarx/) in `$PATH` with `cargo
 ❯ CARGO_TARGET_WASM32_WASI_RUNNER="enarx run --wasmcfgfile Enarx.toml" cargo run --target wasm32-wasi 
 ```
 
-Server is running on [`https://127.0.0.1:3000`](https://127.0.0.1:3000).
+Server is running on [`https://127.0.0.1:10020`](https://127.0.0.1:10020).
