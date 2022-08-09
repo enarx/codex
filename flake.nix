@@ -75,7 +75,7 @@
       fibonacci-c-wasm =
         final.pkgsCross.wasi32.runCommandCC "fibonacci" {
           pname = "fibonacci";
-          version = "0.2.0";
+          version = "0.3.0";
         }
         ''
           mkdir -p "$out/bin"
@@ -95,7 +95,7 @@
       fibonacci-cpp-wasm =
         final.pkgsCross.wasi32.runCommandCC "fibonacci" {
           pname = "fibonacci";
-          version = "0.2.0";
+          version = "0.3.0";
         }
         ''
           mkdir -p "$out/bin"
@@ -114,7 +114,7 @@
 
       fibonacci-go-wasm = final.stdenv.mkDerivation rec {
         pname = "fibonacci";
-        version = "0.2.0";
+        version = "0.3.0";
 
         src = "${self}/Go/fibonacci";
 
@@ -159,7 +159,7 @@
 
       fibonacci-zig-wasm = final.stdenv.mkDerivation {
         pname = "fibonacci";
-        version = "0.3.0";
+        version = "0.4.0";
 
         src = "${self}/Zig/fibonacci";
 
