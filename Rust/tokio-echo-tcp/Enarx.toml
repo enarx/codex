@@ -12,6 +12,6 @@ kind = "stderr"
 [[files]]
 name = "LISTEN"
 kind = "listen"
-port = 12345
+port = 10010
 prot = "tcp"
 #prot = "tls"
