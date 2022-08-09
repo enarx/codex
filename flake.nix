@@ -2,7 +2,7 @@
   description = "Enarx Cod(e) Ex(amples)";
 
   inputs.cryptle.url = github:enarx/cryptle;
-  inputs.enarx.url = github:enarx/enarx/v0.6.2;
+  inputs.enarx.url = github:enarx/enarx/v0.6.3;
   inputs.fenix.url = github:nix-community/fenix;
   inputs.flake-utils.url = github:numtide/flake-utils;
   inputs.naersk.inputs.nixpkgs.follows = "nixpkgs";
