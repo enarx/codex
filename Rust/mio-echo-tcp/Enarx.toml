@@ -10,5 +10,5 @@ kind = "stderr"
 [[files]]
 kind = "listen"
 prot = "tcp"
-port = 9000
+port = 10000
 name = "TEST_TCP_LISTEN"
