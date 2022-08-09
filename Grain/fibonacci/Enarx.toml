@@ -1,0 +1,15 @@
+# Arguments
+args = [
+     "7",
+     "21"
+]
+
+# Pre-opened file descriptors
+[[files]]
+kind = "null"
+
+[[files]]
+kind = "stdout"
+
+[[files]]
+kind = "stderr"
