@@ -43,7 +43,7 @@ kind = "stderr"
 [[files]]
 name = "LISTEN"
 kind = "listen"
-port = 12345
+port = 10010
 prot = "tcp"
 ```
 
@@ -52,7 +52,7 @@ Click on the `Deploy` button.
 Now open a terminal on your machine. You are going to connect with the server using either ncat or nc (these are popular networking tools that are usually available out-of-the-box):
 
 ```sh
-echo hello | ncat sgx.equinix.try.enarx.dev 12345 
+echo hello | ncat sgx.equinix.try.enarx.dev 10010 
 ```
 
 In the __Try Enarx__ website, you should see the following output:
@@ -78,7 +78,7 @@ CARGO_TARGET_WASM32_WASI_RUNNER="enarx run --wasmcfgfile Enarx.toml" cargo run -
 Open another shell and enter:
 
 ```sh
-echo hello | ncat 127.0.0.1 12345 
+echo hello | ncat 127.0.0.1 10010 
 ```
 
 You should see the following output from Enarx:
