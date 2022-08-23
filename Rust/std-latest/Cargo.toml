@@ -1,0 +1,9 @@
+[package]
+name = "std-latest"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.57"
+httparse = "1.8.0"
+serde_json = "1.0.85"

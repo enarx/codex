@@ -1,0 +1,15 @@
+[[files]]
+kind = "stdin"
+
+[[files]]
+kind = "stdout"
+
+[[files]]
+kind = "stderr"
+
+[[files]]
+name = "api.github.com"
+kind = "connect"
+prot = "tls"
+port = 443
+host = "api.github.com"
