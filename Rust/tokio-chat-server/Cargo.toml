@@ -1,0 +1,12 @@
+[package]
+name = "tokio-chat-server"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+anyhow = "1.0.57"
+futures = { version = "0.3.24", features = ["io-compat"] }
+tokio = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b", default-features = false, features = ["fs", "net", "rt", "macros", "io-util", "io-std"] }
+tokio-stream = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b", default-features = false, features = ["net", "io-util", "sync"] }
+ulid = "1.0.0"

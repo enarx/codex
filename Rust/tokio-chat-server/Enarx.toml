@@ -1,0 +1,14 @@
+[[files]]
+kind = "stdin"
+
+[[files]]
+kind = "stdout"
+
+[[files]]
+kind = "stderr"
+
+[[files]]
+name = "ingest"
+kind = "listen"
+port = 50000
+prot = "tcp"
