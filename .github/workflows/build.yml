@@ -8,6 +8,7 @@ jobs:
     strategy:
       matrix:
         output: 
+        - chat-server-rust-tokio
         - cryptle-rust
         - echo-tcp-rust-mio
         - echo-tcp-rust-tokio

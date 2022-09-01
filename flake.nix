@@ -72,6 +72,19 @@
         rustc = rust;
       };
     in {
+      chat-server-rust-tokio-wasm = naersk-lib.buildPackage {
+        src = "${self}/Rust/tokio-chat-server";
+        CARGO_BUILD_TARGET = "wasm32-wasi";
+      };
+
+      chat-server-rust-tokio = buildEnarxPackage {
+        inherit (final) pkgs;
+        inherit (cargoPackage "${self}/Rust/tokio-chat-server/Cargo.toml") name version;
+
+        wasm = "${final.chat-server-rust-tokio-wasm}/bin/tokio-chat-server.wasm";
+        conf = "${self}/Rust/tokio-chat-server/Enarx.toml";
+      };
+
       fibonacci-c-wasm =
         final.pkgsCross.wasi32.runCommandCC "fibonacci" {
           pname = "fibonacci";
@@ -276,6 +289,8 @@
         packages = with pkgs;
           {
             inherit
+              chat-server-rust-tokio
+              chat-server-rust-tokio-wasm
               echo-tcp-rust-mio
               echo-tcp-rust-mio-wasm
               echo-tcp-rust-tokio
