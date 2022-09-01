@@ -269,6 +269,7 @@
             codex
             credentialHelpers
             cryptle.overlays.default
+            fenix.overlay
           ];
         };
 
@@ -309,31 +310,46 @@
               ;
           };
 
-        devShells = with pkgs;
+        devShells =
           {
-            default = mkShell {
+            default = pkgs.mkShell {
               buildInputs = [
                 enarx.packages.${system}.enarx-static
               ];
             };
+
+            rust = devShells.default.overrideAttrs (attrs: let
+              rust = with pkgs.fenix;
+                combine [
+                  stable.rustc
+                  stable.cargo
+                  targets.wasm32-wasi.stable.rust-std
+                ];
+            in {
+              buildInputs =
+                attrs.buildInputs
+                ++ [
+                  rust
+                ];
+            });
           }
-          // lib.optionalAttrs (!tinygo.meta.broken) {
+          // pkgs.lib.optionalAttrs (!pkgs.tinygo.meta.broken) {
             # NOTE: TinyGo is broken on some platforms, only add Go shell on platforms where it works
             go = devShells.default.overrideAttrs (attrs: {
               buildInputs =
                 attrs.buildInputs
                 ++ [
-                  tinygo
+                  pkgs.tinygo
                 ];
             });
           }
-          // lib.optionalAttrs (!zig.meta.broken) {
+          // pkgs.lib.optionalAttrs (!pkgs.zig.meta.broken) {
             # NOTE: Zig is broken on some platforms, only add Zig shell on platforms where it works
             zig = devShells.default.overrideAttrs (attrs: {
               buildInputs =
                 attrs.buildInputs
                 ++ [
-                  zig
+                  pkgs.zig
                 ];
             });
           };
