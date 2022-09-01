@@ -72,6 +72,19 @@
         rustc = rust;
       };
     in {
+      chat-client-rust-tokio-wasm = naersk-lib.buildPackage {
+        src = "${self}/Rust/tokio-chat-client";
+        CARGO_BUILD_TARGET = "wasm32-wasi";
+      };
+
+      chat-client-rust-tokio = buildEnarxPackage {
+        inherit (final) pkgs;
+        inherit (cargoPackage "${self}/Rust/tokio-chat-client/Cargo.toml") name version;
+
+        wasm = "${final.chat-client-rust-tokio-wasm}/bin/tokio-chat-client.wasm";
+        conf = "${self}/Rust/tokio-chat-client/Enarx.toml";
+      };
+
       chat-server-rust-tokio-wasm = naersk-lib.buildPackage {
         src = "${self}/Rust/tokio-chat-server";
         CARGO_BUILD_TARGET = "wasm32-wasi";
@@ -289,6 +302,8 @@
         packages = with pkgs;
           {
             inherit
+              chat-client-rust-tokio
+              chat-client-rust-tokio-wasm
               chat-server-rust-tokio
               chat-server-rust-tokio-wasm
               echo-tcp-rust-mio

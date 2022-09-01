@@ -1,0 +1,15 @@
+[[files]]
+kind = "stdin"
+
+[[files]]
+kind = "stdout"
+
+[[files]]
+kind = "stderr"
+
+[[files]]
+name = "server"
+kind = "connect"
+port = 50000
+prot = "tcp"
+host = "127.0.0.1"
