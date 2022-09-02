@@ -62,8 +62,8 @@
     codex = final: prev: let
       rust = with fenix.packages.${final.system};
         combine [
-          stable.rustc
           stable.cargo
+          stable.rustc
           targets.wasm32-wasi.stable.rust-std
         ];
 
@@ -310,47 +310,39 @@
               ;
           };
 
-        devShells =
+        devShells = let
+          rust = with pkgs.fenix;
+            combine [
+              stable.cargo
+              stable.clippy
+              stable.rustc
+              stable.rustfmt
+              targets.wasm32-wasi.stable.rust-std
+            ];
+        in
           {
             default = pkgs.mkShell {
               buildInputs = [
                 enarx.packages.${system}.enarx-static
+
+                rust
               ];
             };
 
-            rust = devShells.default.overrideAttrs (attrs: let
-              rust = with pkgs.fenix;
-                combine [
-                  stable.rustc
-                  stable.cargo
-                  targets.wasm32-wasi.stable.rust-std
-                ];
-            in {
-              buildInputs =
-                attrs.buildInputs
-                ++ [
-                  rust
-                ];
+            rust = devShells.default.overrideAttrs (attrs: {
+              buildInputs = attrs.buildInputs ++ [rust];
             });
           }
           // pkgs.lib.optionalAttrs (!pkgs.tinygo.meta.broken) {
             # NOTE: TinyGo is broken on some platforms, only add Go shell on platforms where it works
             go = devShells.default.overrideAttrs (attrs: {
-              buildInputs =
-                attrs.buildInputs
-                ++ [
-                  pkgs.tinygo
-                ];
+              buildInputs = attrs.buildInputs ++ [pkgs.tinygo];
             });
           }
           // pkgs.lib.optionalAttrs (!pkgs.zig.meta.broken) {
             # NOTE: Zig is broken on some platforms, only add Zig shell on platforms where it works
             zig = devShells.default.overrideAttrs (attrs: {
-              buildInputs =
-                attrs.buildInputs
-                ++ [
-                  pkgs.zig
-                ];
+              buildInputs = attrs.buildInputs ++ [pkgs.zig];
             });
           };
       in {
