@@ -3,5 +3,5 @@
 version = 3
 
 [[package]]
-name = "tcpclient"
-version = "0.0.1"
+name = "std-tcp-client"
+version = "0.1.0"
