@@ -24,7 +24,7 @@ Run inside Enarx Keep:
 
 ```sh
 cargo build --release --target=wasm32-wasi
-enarx run --backend=nil --wasmcfgfile Enarx.toml target/wasm32-wasi/release/entropyclient.wasm
+enarx run --backend=nil --wasmcfgfile Enarx.toml target/wasm32-wasi/release/std-tcp-client.wasm
 ```
 
 Expected result following:
