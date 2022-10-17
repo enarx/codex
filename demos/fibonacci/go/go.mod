@@ -1,3 +1,3 @@
-module github.com/enarx/codex/Go/fibonacci
+module github.com/enarx/codex/demos/fibonacci/go
 
 go 1.17
