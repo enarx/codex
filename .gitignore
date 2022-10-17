@@ -1,8 +1,8 @@
-Rust/*/target/
-Zig/*/zig-cache/
-Zig/*/zig-out/
+**/rust/**/target/
+**/zig/**/zig-cache/
+**/zig/**/zig-out/
+*.wasm
 .idea/
 .vscode/
-result
-*.wasm
 a.out
+result
