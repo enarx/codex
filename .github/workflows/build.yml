@@ -19,6 +19,7 @@ jobs:
         - fibonacci-rust
         - fibonacci-zig
         - http-rust-tokio
+        - latest-rust-std
 
     runs-on: ubuntu-20.04
     steps:

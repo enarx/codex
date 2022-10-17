@@ -247,6 +247,19 @@
         wasm = "${final.http-rust-tokio-wasm}/bin/tokio-http.wasm";
         conf = "${self}/Rust/tokio-http/Enarx.toml";
       };
+
+      latest-rust-std-wasm = naersk-lib.buildPackage {
+        src = "${self}/Rust/std-latest";
+        CARGO_BUILD_TARGET = "wasm32-wasi";
+      };
+
+      latest-rust-std = buildEnarxPackage {
+        inherit (final) pkgs;
+        inherit (cargoPackage "${self}/Rust/std-latest/Cargo.toml") name version;
+
+        wasm = "${final.latest-rust-std-wasm}/bin/std-latest.wasm";
+        conf = "${self}/Rust/std-latest/Enarx.toml";
+      };
     };
 
     credentialHelpers = final: prev: {
@@ -320,6 +333,8 @@
               fibonacci-rust-wasm
               http-rust-tokio
               http-rust-tokio-wasm
+              latest-rust-std
+              latest-rust-std-wasm
               ;
 
             cryptle-rust = cryptle-enarx;
