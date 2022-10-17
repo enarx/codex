@@ -8,17 +8,14 @@ jobs:
     strategy:
       matrix:
         output: 
-        - chat-client-rust-tokio
-        - chat-server-rust-tokio
+        - chat-client-rust
+        - chat-server-rust
         - cryptle-rust
-        - echo-tcp-rust-mio
-        - echo-tcp-rust-tokio
         - fibonacci-c
         - fibonacci-cpp
         - fibonacci-go
         - fibonacci-rust
         - fibonacci-zig
-        - http-rust-tokio
 
     runs-on: ubuntu-20.04
     steps:
