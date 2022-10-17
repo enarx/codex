@@ -20,17 +20,36 @@
   }: let
     cargoPackage = toml: (builtins.fromTOML (builtins.readFile toml)).package;
 
+    demos.chat-client.conf = ./demos/chat-client/Enarx.toml;
+
+    demos.chat-client.rust.src = ./demos/chat-client/rust;
+    demos.chat-client.rust.package = cargoPackage ./demos/chat-client/rust/Cargo.toml;
+
+    demos.chat-server.conf = ./demos/chat-server/Enarx.toml;
+
+    demos.chat-server.rust.src = ./demos/chat-server/rust;
+    demos.chat-server.rust.package = cargoPackage ./demos/chat-server/rust/Cargo.toml;
+
+    demos.fibonacci.conf = ./demos/fibonacci/Enarx.toml;
+
+    demos.fibonacci.c.src = ./demos/fibonacci/c/fibonacci.c;
+    demos.fibonacci.cpp.src = ./demos/fibonacci/c++/fibonacci.cpp;
+    demos.fibonacci.go.src = ./demos/fibonacci/go;
+    demos.fibonacci.rust.package = cargoPackage ./demos/fibonacci/rust/Cargo.toml;
+    demos.fibonacci.rust.src = ./demos/fibonacci/rust;
+    demos.fibonacci.zig.src = ./demos/fibonacci/zig;
+
+    CARGO_BUILD_TARGET = "wasm32-wasi";
+
     buildEnarxPackage = {
       pkgs,
-      name,
+      pname,
       version,
       wasm,
       conf,
     }:
       pkgs.stdenv.mkDerivation {
-        inherit version;
-
-        pname = name;
+        inherit pname version;
 
         dontUnpack = true;
         installPhase = ''
@@ -41,21 +60,30 @@
       };
 
     buildFibonacciPackage = {
-      conf,
       pkgs,
       wasm,
       ...
-    } @ args:
-      (buildEnarxPackage args).overrideAttrs (attrs: {
+    } @ args: let
+      args' =
+        args
+        // {
+          inherit (demos.fibonacci) conf;
+          inherit (wasm) version;
+
+          wasm = "${wasm}/bin/fibonacci.wasm";
+          pname = "fibonacci";
+        };
+    in
+      (buildEnarxPackage args').overrideAttrs (attrs: {
         doCheck = true;
 
         checkInputs = [
-          enarx.packages.${pkgs.system}.enarx-static
+          enarx.packages.${pkgs.system}.enarx
         ];
 
         checkPhase = ''
-          ${self}/tests/run.sh ${self}/tests/fibonacci/golden/default --wasmcfgfile ${conf} ${wasm}
-          cat ${self}/tests/fibonacci/stdin | ${self}/tests/run.sh ${self}/tests/fibonacci/golden/stdin ${wasm}
+          ${self}/tests/run.sh ${self}/tests/fibonacci/golden/default --wasmcfgfile ${demos.fibonacci.conf} ${wasm}/bin/fibonacci.wasm
+          cat ${self}/tests/fibonacci/stdin | ${self}/tests/run.sh ${self}/tests/fibonacci/golden/stdin ${wasm}/bin/fibonacci.wasm
         '';
       });
 
@@ -72,82 +100,82 @@
         rustc = rust;
       };
     in {
-      chat-client-rust-tokio-wasm = naersk-lib.buildPackage {
-        src = "${self}/Rust/tokio-chat-client";
-        CARGO_BUILD_TARGET = "wasm32-wasi";
+      chat-client-rust-wasm = naersk-lib.buildPackage {
+        inherit (demos.chat-client.rust) src;
+        inherit (demos.chat-client.rust.package) version;
+        inherit CARGO_BUILD_TARGET;
+
+        pname = "chat-client-rust";
       };
 
-      chat-client-rust-tokio = buildEnarxPackage {
+      chat-client-rust = buildEnarxPackage {
+        inherit (demos.chat-client) conf;
         inherit (final) pkgs;
-        inherit (cargoPackage "${self}/Rust/tokio-chat-client/Cargo.toml") name version;
+        inherit (final.chat-client-rust-wasm) pname version;
 
-        wasm = "${final.chat-client-rust-tokio-wasm}/bin/tokio-chat-client.wasm";
-        conf = "${self}/Rust/tokio-chat-client/Enarx.toml";
+        wasm = "${final.chat-client-rust-wasm}/bin/${demos.chat-client.rust.package.name}.wasm";
       };
 
-      chat-server-rust-tokio-wasm = naersk-lib.buildPackage {
-        src = "${self}/Rust/tokio-chat-server";
-        CARGO_BUILD_TARGET = "wasm32-wasi";
+      chat-server-rust-wasm = naersk-lib.buildPackage {
+        inherit (demos.chat-server.rust) src;
+        inherit (demos.chat-server.rust.package) version;
+        inherit CARGO_BUILD_TARGET;
+
+        pname = "chat-server-rust";
       };
 
-      chat-server-rust-tokio = buildEnarxPackage {
+      chat-server-rust = buildEnarxPackage {
+        inherit (demos.chat-server) conf;
         inherit (final) pkgs;
-        inherit (cargoPackage "${self}/Rust/tokio-chat-server/Cargo.toml") name version;
+        inherit (final.chat-server-rust-wasm) pname version;
 
-        wasm = "${final.chat-server-rust-tokio-wasm}/bin/tokio-chat-server.wasm";
-        conf = "${self}/Rust/tokio-chat-server/Enarx.toml";
+        wasm = "${final.chat-server-rust-wasm}/bin/${demos.chat-server.rust.package.name}.wasm";
       };
 
       fibonacci-c-wasm =
         final.pkgsCross.wasi32.runCommandCC "fibonacci" {
-          pname = "fibonacci";
+          pname = "fibonacci-c";
           version = "0.3.0";
         }
         ''
           mkdir -p "$out/bin"
-          $CC -Wall -pedantic ${self}/C/fibonacci/fibonacci.c \
+          $CC -Wall -pedantic ${demos.fibonacci.c.src} \
             -o "$out/bin/fibonacci.wasm"
         '';
 
       fibonacci-c = buildFibonacciPackage {
         inherit (final) pkgs;
-        inherit (final.fibonacci-c-wasm) version;
-        name = final.fibonacci-c-wasm.pname;
 
-        wasm = "${final.fibonacci-c-wasm}/bin/fibonacci.wasm";
-        conf = "${self}/C/fibonacci/Enarx.toml";
+        wasm = final.fibonacci-c-wasm;
       };
 
       fibonacci-cpp-wasm =
         final.pkgsCross.wasi32.runCommandCC "fibonacci" {
-          pname = "fibonacci";
+          pname = "fibonacci-cpp";
           version = "0.3.0";
         }
         ''
           mkdir -p "$out/bin"
-          $CXX -Wall -pedantic ${self}/C++/fibonacci/fibonacci.cpp \
+          $CXX -Wall -pedantic ${demos.fibonacci.cpp.src} \
             -o "$out/bin/fibonacci.wasm"
         '';
 
       fibonacci-cpp = buildFibonacciPackage {
         inherit (final) pkgs;
-        inherit (final.fibonacci-cpp-wasm) version;
-        name = final.fibonacci-cpp-wasm.pname;
 
-        wasm = "${final.fibonacci-cpp-wasm}/bin/fibonacci.wasm";
-        conf = "${self}/C++/fibonacci/Enarx.toml";
+        wasm = final.fibonacci-cpp-wasm;
       };
 
       fibonacci-go-wasm = final.stdenv.mkDerivation rec {
-        pname = "fibonacci";
-        version = "0.3.0";
+        inherit (demos.fibonacci.go) src;
 
-        src = "${self}/Go/fibonacci";
+        pname = "fibonacci-go";
+        version = "0.3.0";
 
         nativeBuildInputs = with final; [tinygo];
 
         configurePhase = ''
-          export HOME=$TMPDIR
+          export HOME=$TMPDIR/home
           export GOCACHE=$TMPDIR/go-cache
         '';
 
@@ -157,37 +185,35 @@
 
         installPhase = ''
           mkdir -p $out/bin
-          cp main.wasm $out/bin/${pname}.wasm
+          cp main.wasm $out/bin/fibonacci.wasm
         '';
       };
 
       fibonacci-go = buildFibonacciPackage {
         inherit (final) pkgs;
-        inherit (final.fibonacci-go-wasm) version;
-        name = final.fibonacci-go-wasm.pname;
 
-        wasm = "${final.fibonacci-go-wasm}/bin/fibonacci.wasm";
-        conf = "${self}/Go/fibonacci/Enarx.toml";
+        wasm = final.fibonacci-go-wasm;
       };
 
       fibonacci-rust-wasm = naersk-lib.buildPackage {
-        src = "${self}/Rust/fibonacci";
-        CARGO_BUILD_TARGET = "wasm32-wasi";
+        inherit (demos.fibonacci.rust) src;
+        inherit (demos.fibonacci.rust.package) version;
+        inherit CARGO_BUILD_TARGET;
+
+        pname = "fibonacci-rust";
       };
 
       fibonacci-rust = buildFibonacciPackage {
         inherit (final) pkgs;
-        inherit (cargoPackage "${self}/Rust/fibonacci/Cargo.toml") name version;
 
-        wasm = "${final.fibonacci-rust-wasm}/bin/fibonacci.wasm";
-        conf = "${self}/Rust/fibonacci/Enarx.toml";
+        wasm = final.fibonacci-rust-wasm;
       };
 
       fibonacci-zig-wasm = final.stdenv.mkDerivation {
-        pname = "fibonacci";
-        version = "0.4.0";
+        inherit (demos.fibonacci.zig) src;
 
-        src = "${self}/Zig/fibonacci";
+        pname = "fibonacci-zig";
+        version = "0.4.0";
 
         nativeBuildInputs = with final; [zig];
 
@@ -202,50 +228,8 @@
 
       fibonacci-zig = buildFibonacciPackage {
         inherit (final) pkgs;
-        inherit (final.fibonacci-zig-wasm) version;
-        name = final.fibonacci-zig-wasm.pname;
 
-        wasm = "${final.fibonacci-zig-wasm}/bin/fibonacci.wasm";
-        conf = "${self}/Zig/fibonacci/Enarx.toml";
-      };
-
-      echo-tcp-rust-mio-wasm = naersk-lib.buildPackage {
-        src = "${self}/Rust/mio-echo-tcp";
-        CARGO_BUILD_TARGET = "wasm32-wasi";
-      };
-
-      echo-tcp-rust-mio = buildEnarxPackage {
-        inherit (final) pkgs;
-        inherit (cargoPackage "${self}/Rust/mio-echo-tcp/Cargo.toml") name version;
-
-        wasm = "${final.echo-tcp-rust-mio-wasm}/bin/mio-echo-tcp.wasm";
-        conf = "${self}/Rust/mio-echo-tcp/Enarx.toml";
-      };
-
-      echo-tcp-rust-tokio-wasm = naersk-lib.buildPackage {
-        src = "${self}/Rust/tokio-echo-tcp";
-        CARGO_BUILD_TARGET = "wasm32-wasi";
-      };
-
-      echo-tcp-rust-tokio = buildEnarxPackage {
-        inherit (final) pkgs;
-        inherit (cargoPackage "${self}/Rust/tokio-echo-tcp/Cargo.toml") name version;
-
-        wasm = "${final.echo-tcp-rust-tokio-wasm}/bin/tokio-echo-tcp.wasm";
-        conf = "${self}/Rust/tokio-echo-tcp/Enarx.toml";
-      };
-
-      http-rust-tokio-wasm = naersk-lib.buildPackage {
-        src = "${self}/Rust/tokio-http";
-        CARGO_BUILD_TARGET = "wasm32-wasi";
-      };
-
-      http-rust-tokio = buildEnarxPackage {
-        inherit (final) pkgs;
-        inherit (cargoPackage "${self}/Rust/tokio-http/Cargo.toml") name version;
-
-        wasm = "${final.http-rust-tokio-wasm}/bin/tokio-http.wasm";
-        conf = "${self}/Rust/tokio-http/Enarx.toml";
+        wasm = final.fibonacci-zig-wasm;
       };
     };
 
@@ -302,14 +286,10 @@
         packages = with pkgs;
           {
             inherit
-              chat-client-rust-tokio
-              chat-client-rust-tokio-wasm
-              chat-server-rust-tokio
-              chat-server-rust-tokio-wasm
-              echo-tcp-rust-mio
-              echo-tcp-rust-mio-wasm
-              echo-tcp-rust-tokio
-              echo-tcp-rust-tokio-wasm
+              chat-client-rust
+              chat-client-rust-wasm
+              chat-server-rust
+              chat-server-rust-wasm
               enarx-credential-helper-gopass
               enarx-credential-helper-pass
               fibonacci-c
@@ -318,8 +298,6 @@
               fibonacci-cpp-wasm
               fibonacci-rust
               fibonacci-rust-wasm
-              http-rust-tokio
-              http-rust-tokio-wasm
               ;
 
             cryptle-rust = cryptle-enarx;
@@ -353,7 +331,7 @@
           {
             default = pkgs.mkShell {
               buildInputs = [
-                enarx.packages.${system}.enarx-static
+                enarx.packages.${system}.enarx
 
                 rust
               ];
@@ -380,6 +358,8 @@
           devShells
           packages
           ;
+
+        checks = packages;
 
         formatter = pkgs.alejandra;
       });
