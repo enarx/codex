@@ -20,6 +20,7 @@ jobs:
     strategy:
       matrix:
         output: 
+        - chat-client-c
         - chat-client-cpp
         - chat-client-rust
         - chat-server-rust
