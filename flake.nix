@@ -22,6 +22,7 @@
 
     demos.chat-client.conf = ./demos/chat-client/Enarx.toml;
 
+    demos.chat-client.c.src = ./demos/chat-client/c/main.c;
     demos.chat-client.cpp.src = ./demos/chat-client/c++/main.cpp;
     demos.chat-client.rust.src = ./demos/chat-client/rust;
     demos.chat-client.rust.package = cargoPackage ./demos/chat-client/rust/Cargo.toml;
@@ -101,6 +102,25 @@
         rustc = rust;
       };
     in {
+      chat-client-c-wasm =
+        final.pkgsCross.wasi32.runCommandCC "chat-client" {
+          pname = "chat-client-c";
+          version = "0.1.0";
+        }
+        ''
+          mkdir -p "$out/bin"
+          $CC -Wall -pedantic ${demos.chat-client.c.src} \
+            -o "$out/bin/chat-client.wasm"
+        '';
+
+      chat-client-c = buildEnarxPackage {
+        inherit (demos.chat-client) conf;
+        inherit (final) pkgs;
+        inherit (final.chat-client-c-wasm) pname version;
+
+        wasm = "${final.chat-client-c-wasm}/bin/chat-client.wasm";
+      };
+
       chat-client-cpp-wasm =
         final.pkgsCross.wasi32.runCommandCC "chat-client" {
           pname = "chat-client-cpp";
@@ -306,6 +326,8 @@
         packages = with pkgs;
           {
             inherit
+              chat-client-c
+              chat-client-c-wasm
               chat-client-cpp
               chat-client-cpp-wasm
               chat-client-rust
