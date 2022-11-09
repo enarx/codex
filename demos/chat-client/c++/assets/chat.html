@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Client</title>
+    <script src="/jquery.js"></script>
+    <script>
+        function sendMessage() {
+            $.ajax({
+                method: 'PUT',
+                data: {
+                    message: document.getElementById("message").value,
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <input type="text" id="message" maxlength="1000"/>
+    <button onclick="sendMessage()">Send Message</button>
+</body>
+
+</html>

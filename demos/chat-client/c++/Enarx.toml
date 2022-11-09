@@ -1,0 +1,26 @@
+args = [
+     "--webinterface"
+]
+
+[[files]]
+kind = "stdin"
+
+[[files]]
+kind = "stdout"
+
+[[files]]
+kind = "stderr"
+
+[[files]]
+name = "server"
+kind = "connect"
+port = 50000
+prot = "tcp"
+host = "127.0.0.1"
+
+[[files]]
+name = "web"
+kind = "listen"
+port = 8080
+prot = "tcp"
+host = "127.0.0.1"
