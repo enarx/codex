@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>Enarx Chat</title>
+</head>
+
+<body>
+
+    <section>
+        <h1>Enarx Chat</h1>
+        <p>Click on the chat button to start</p>
+    </section>
+
+    <div id="chat-container">
+        <button class='chat-btn'><i class="material-icons">chat</i></button>
+        <div class='chat-popup'>
+        
+            <div class='chat-header'>
+                <div class='chatbot-img'>
+                    <i class='material-icons bot-img'>chat</i>
+                </div>
+                <h3 class='bot-title'>Enarx Chat</h3>
+            </div>
+
+            <div class='chat-area'>
+                <div class='bot-msg'>
+                    <i class='material-icons bot-img'>face</i>
+                    <span class='msg'>Enarx Chat</span>
+                </div>
+            </div>
+
+
+            <div class='chat-input-area'>
+                <input type='text' autofocus class='chat-input' onkeypress='return givenUserInput(event)' placeholder='Type a message ...' autocomplete='off'>
+                <button class='chat-submit'><i class='material-icons'>send</i></button>
+            </div>
+
+        </div>
+    </div>
+    <script src="./script.js"></script>
+
+</body>
+
+</html>
