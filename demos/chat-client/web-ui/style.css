@@ -6,8 +6,8 @@
 }
 
 :root {
-    --chat-window-total-width: 380px;
-    --chat-window-height: 500px;
+    --chat-window-total-width: 85%;
+    --chat-window-height: 80%;
     --chat-window-color-theme: #1e90ff;
     --chat-window-bg-color: #fff;
     --chat-send-button: #1e90ff;
@@ -211,9 +211,8 @@ p {
 
 @media (max-width:500px) {
     .chat-popup {
-        bottom: 120px;
         right: 10%;
         width: 80vw;
-        height: 100%;
+        height: 80%;
     }
 }
