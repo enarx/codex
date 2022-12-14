@@ -17,7 +17,7 @@ async fn main() -> anyhow::Result<()> {
     let fd_count = usize::from_str(&fd_count).context("failed to parse `FD_COUNT`")?;
     assert_eq!(
         fd_count,
-        4, // STDIN, STDOUT, STDERR and a socket
+        5, // STDIN, STDOUT, STDERR and 2 sockets
         "unexpected amount of file descriptors received"
     );
     let mut stream = match env::var("FD_NAMES")

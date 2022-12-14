@@ -23,7 +23,8 @@
     demos.chat-client.conf = ./demos/chat-client/Enarx.toml;
 
     demos.chat-client.c.src = ./demos/chat-client/c/main.c;
-    demos.chat-client.cpp.src = ./demos/chat-client/c++/main.cpp;
+    demos.chat-client.cpp.src = ./demos/chat-client/c++;
+
     demos.chat-client.rust.src = ./demos/chat-client/rust;
     demos.chat-client.rust.package = cargoPackage ./demos/chat-client/rust/Cargo.toml;
 
@@ -128,7 +129,7 @@
         }
         ''
           mkdir -p "$out/bin"
-          $CXX -Wall -pedantic ${demos.chat-client.cpp.src} \
+          $CXX -Wall -I"${demos.chat-client.cpp.src}/assets.h" -pedantic ${demos.chat-client.cpp.src}/main.cpp \
             -o "$out/bin/chat-client.wasm"
         '';
 
