@@ -312,17 +312,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "tokio-chat-server"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "futures 0.3.24",
- "tokio",
- "tokio-stream",
- "ulid",
-]
-
-[[package]]
 name = "tokio-io"
 version = "0.1.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
