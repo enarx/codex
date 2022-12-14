@@ -13,3 +13,10 @@ kind = "connect"
 port = 50000
 prot = "tcp"
 host = "127.0.0.1"
+
+[[files]]
+name = "web"
+kind = "listen"
+port = 50010
+prot = "tcp"
+host = "127.0.0.1"
