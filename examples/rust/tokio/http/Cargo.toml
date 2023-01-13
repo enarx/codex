@@ -5,9 +5,9 @@ publish = false
 edition = "2021"
 
 [dependencies]
-tokio = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b", features = ["net", "rt", "macros"] }
-tokio-util = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b", features = ["codec"] }
-tokio-stream = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b"  }
+tokio = { version = "1.24.1", features = ["net", "rt", "macros"] }
+tokio-util = { version = "0.7.4", features = ["codec"] }
+tokio-stream = "0.1.11"
 
 bytes = "1.0.0"
 futures = { version = "0.3.0", features = ["thread-pool"]}
