@@ -7,4 +7,4 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-tokio = { git = "https://github.com/tokio-rs/tokio", rev = "56be5286ee9548c483b91b7593ededcd34c5da0b", default-features = false, features = ["net", "rt", "macros", "io-util", "io-std"] }
+tokio = { version = "1.24.1", default-features = false, features = ["net", "rt", "macros", "io-util", "io-std"] }
