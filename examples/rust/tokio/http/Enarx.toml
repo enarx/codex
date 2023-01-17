@@ -13,3 +13,4 @@ kind = "stderr"
 kind = "listen"
 port = 10020
 name = "TCP_LISTEN"
+prot = "tcp"
