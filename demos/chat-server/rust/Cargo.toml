@@ -7,6 +7,6 @@ publish = false
 [dependencies]
 anyhow = "1.0.57"
 futures = { version = "0.3.25", features = ["io-compat"] }
-tokio = { version = "1.24.1", default-features = false, features = ["net", "rt", "macros"] }
+tokio = { version = "1.24.2", default-features = false, features = ["net", "rt", "macros"] }
 tokio-stream = { version = "0.1.11", default-features = false, features = ["net", "io-util", "sync"] }
 ulid = "1.0.0"
